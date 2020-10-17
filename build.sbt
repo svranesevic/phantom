@@ -130,6 +130,7 @@ lazy val Versions = new {
   val scala212 = "2.12.10"
   val scala213 = "2.13.1"
   val monix = "3.1.0-2156c0e"
+  val catsEffect = "3.0.0-M1" // "2.2.0"
   val macroCompat = "1.1.1"
   val collectionCompat = "2.1.3"
   val paradise = "2.1.1"
@@ -313,6 +314,7 @@ lazy val phantom = (project in file("."))
     phantomFinagle,
     //phantomStreams,
     phantomMonix,
+    phantomCatsEffect,
     readme
   )
 
@@ -469,6 +471,22 @@ lazy val phantomExample = (project in file("phantom-example"))
         "com.outworkers" %% "util-samplers" % Versions.util % Test,
         "org.scalatest" %% "scalatest" % Versions.scalatest % Test,
         "io.monix" %% "monix" % Versions.monix
+      ) ++ Versions.paradiseVersion(scalaVersion.value)
+    ).settings(
+    sharedSettings: _*
+  ).dependsOn(
+    phantomDsl % "compile->compile;test->test;"
+  )
+
+  lazy val phantomCatsEffect = (project in file("phantom-cats-effect"))
+    .settings(
+      name := "phantom-cats-effect",
+      crossScalaVersions := Versions.scala.all,
+      moduleName := "phantom-cats-effect",
+      libraryDependencies ++= Seq(
+        "com.outworkers" %% "util-samplers" % Versions.util % Test,
+        "org.scalatest" %% "scalatest" % Versions.scalatest % Test,
+        "org.typelevel" %% "cats-effect" % Versions.catsEffect
       ) ++ Versions.paradiseVersion(scalaVersion.value)
     ).settings(
     sharedSettings: _*
